@@ -1,0 +1,8 @@
+*nix style console application template
+===========================================================================
+
+This project serves as an application base for when a console tool is
+required for development in a hurry, but no one has time to go through and
+implement the simple things properly.
+
+This template is an empty application.
