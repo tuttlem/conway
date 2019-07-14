@@ -62,7 +62,7 @@ void universe_seed(unsigned char *u, int width, int height) {
   int i;
 
   for (i = 0; i < (width * height); i ++) {
-    u[i] = rand() % 7 == 0;
+    u[i] = rand() % 9 == 0;
   }
 }
 
@@ -83,6 +83,7 @@ void universe_render(unsigned char *u, int width, int height) {
 }
 
 int count_live_neighbours(unsigned char *u, int width, int height, int x, int y) {
+  /* clip the bounds */
   int x1 = (x - 1) % width;
   int x2 = (x + 1) % width;
   int y1 = (y - 1) % height;
@@ -100,6 +101,9 @@ int count_live_neighbours(unsigned char *u, int width, int height, int x, int y)
 
 void universe_permute(unsigned char *u, int width, int height) {
   int x, y, n, l;
+  unsigned char *r = (unsigned char *)malloc(width * height);
+
+  memcpy(r, u, width * height);
 
   for (y = 0; y < height; y ++) {
     for (x = 0; x < width; x ++) {
@@ -107,12 +111,15 @@ void universe_permute(unsigned char *u, int width, int height) {
       n = count_live_neighbours(u, width, height, x, y);
 
       if (l & ((n < 2) || (n > 3))) {
-        u[x + (y * width)] = 0;
+        r[x + (y * width)] = 0;
       } else if (!l & (n == 3)) {
-        u[x + (y * width)] = 1;
+        r[x + (y * width)] = 1;
       }
     }
   }
+
+  memcpy(u, r, width * height);
+  free(r);
 }
 
 void universe_stats(unsigned char *u, int width, int height, int *alive, int *dead) {
